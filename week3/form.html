@@ -9,7 +9,7 @@ background color, border radius for rounded corners, and font size */
 width: 300px;
 margin: 20vh auto 0 auto; /* This centers the form vertically and 
 horizontally */
-padding: 20px;
+padding: 25px;
 background-color: whitesmoke; /* Light gray background for the form */
 border-radius: 4px; /* Rounded corners for the form */
 font-size: 12px;
@@ -32,11 +32,33 @@ background-color: rgb(41, 57, 194); /* Blue background color for the button
 border: none; /* Remove the default border */
 border-radius: 4px; /* Rounded corners for the button */
 }
+
+#form button[disabled] {
+padding: 10px;
+margin-top: 10px; /* Space above the button */
+width: 100%; /* Make the button expand the full width of the form */
+color: white; /* White text color for the button */
+background-color: rgb(41, 57, 194); /* Blue background color for the button 
+*/
+border: none; /* Remove the default border */
+border-radius: 4px; /* Rounded corners for the button */
+opacity: 0.5;
+cursor: not-allowed;
+}
 /* Container for input fields: using flexbox for layout, column direction */
 .input-control {
 display: flex;
 flex-direction: column; /* Stack the children (label, input, error message) 
 vertically */
+margin-right: 25px; /* Space between the input fields */
+}
+
+ .misinput {
+    font-size: 17px;
+    margin-top: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    color: red;
 }
 /* Style for input fields inside the container: border style, rounded corners, 
 block-level display, font size, padding, full width */
@@ -67,34 +89,35 @@ font-size: 9px; /* Smaller font size for error messages */
 height: 13px; /* Explicit height to ensure consistent spacing */
 }
     </style>
+
   <div class = "container">
     <form id = "form" action = "/">
     <title>Form Validation</title>
     <h1>Form Validation</h1>
-    <div class = "input-control">
+    <div class = "input-control" id = "div1">
         <h4>Name</h4>
         <input type="text" id="name" placeholder="Enter your username here.">
-        <div class="error"></div>
+        <div class="misinput" id = "error1"></div>
     </div>    
     
-    <div class = "input-control">
+    <div class = "input-control" id = "div2">
         <h4>Email</h4>
         <input type="text" id="email" placeholder="Enter your email here.">
-        <div class = "error"></div>
+        <div class = "misinput" id = "error2"></div>
     </div>
     
-    <div class = "input-control">
+    <div class = "input-control" id = "div3">
         <h4>Password</h4>
-        <input type = "text" id = "password" placeholder = "Enter your password here.">
-        <div class = "error"></div>
+        <input type = "password" id = "password" placeholder = "Enter your password here.">
+        <div class = "misinput" id = "error3"></div>
     </div>
 
-    <div class = "input-control">    
+    <div class = "input-control" id = "div4">    
         <h4>Confirm Password</h4>
-        <input type = "text" id = "confirmPassword" placeholder = "Confirm your password here.">
-        <div class = "error"></div>
+        <input type = "password" id = "confirmPassword" placeholder = "Confirm your password here.">
+        <div class = "misinput" id = "error4"></div>
     </div>    
-    <button type = "button" class = "input-control" onclick = "validateForm()">Submit</button>
+    <button type = "button" class = "input-control" id = "submitButton" onclick = "validateForm()">Submit</button>
   
    </form>
 </div>
@@ -102,46 +125,89 @@ height: 13px; /* Explicit height to ensure consistent spacing */
 
     <script>
         function validateForm() {
-            var name = document.getElementById("name").value;
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-            if (name == "") {
-                alert("Please enter your name.");
-                return false;
+            const name = document.getElementById("name");
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const confirmPassword = document.getElementById("confirmPassword");
+            const submit = document.getElementById("submitButton");
+
+            let flag1, flag2, flag3, flag4, mainFlag = false;
+
+            if (name.value.length == "") {
+               document.getElementById("div1").classList.remove("success");
+               document.getElementById("div1").classList.add("error");
+               document.getElementById("error1").innerHTML = "Please enter your name.";
+               flag1 = false;
             }
-            if (email == "") {
-                alert("Please enter your email.");
-                return false;
+            else{
+                document.getElementById("div1").classList.remove("error");
+                document.getElementById("div1").classList.add("success");
+                document.getElementById("error1").innerHTML = "";
+                flag1 = true;
             }
             
-            else if (email.indexOf("@") < 0){
-                alert ("Please enter a valid email.");
-                return false;
+            if (email.value.indexOf("@") < 0){
+                document.getElementById("div2").classList.remove("success");
+                document.getElementById("div2").classList.add("error");
+                document.getElementById("error2").innerHTML = "Please enter a valid email address.";
+                flag2 = false;
+            }
+
+            else {
+                document.getElementById("div2").classList.remove("error");
+                document.getElementById("div2").classList.add("success");
+                document.getElementById("error2").innerHTML = "";
+                flag2 = true;
+            }
+
+            if (password.value.length < 8){
+                document.getElementById("div3").classList.remove("success");
+                document.getElementById("div3").classList.add("error");
+                document.getElementById("error3").innerHTML = "Please enter a password with at least 8 characters.";
+                flag3 = false;
+            }
+
+            else {
+                document.getElementById("div3").classList.remove("error");
+                document.getElementById("div3").classList.add("success");
+                document.getElementById("error3").innerHTML = "";
+                flag3 = true;
+            }
+
+
+            if (confirmPassword.value != password.value || confirmPassword.value.length < 8){
+                document.getElementById("div4").classList.remove("success");
+                document.getElementById("div4").classList.add("error");
+                document.getElementById("error4").innerHTML = "Please enter the same password.";
+                flag4 = false;
+            }
+
+            else {
+                document.getElementById("div4").classList.remove("error");
+                document.getElementById("div4").classList.add("success");
+                document.getElementById("error4").innerHTML = "";
+                flag4 = true;
+            }
+
+            if (flag1 = true && flag2 == true && flag3 == true && flag4 == true){
+                mainFlag = true;
+            }
+
+            if (mainFlag == false){
+                submit.disabled = true;
+            }
+            if (mainFlag == true){
+                submit.disabled = false;
             }
             
-            if (password == "") {
-                alert("Please enter your password.");
-                return false;
-            }
 
-            else if (password.length < 8){
-                alert("Your password must be at least 8 characters in length.");
-                return false;
-            }
-
-            if (confirmPassword == "") {
-                alert("Please confirm your password.");
-                return false;
-            }
-            else if (password != confirmPassword) {
-                alert("Passwords do not match.");
-                return false;
-            }
-
-            alert("Form submitted successfully.");
-            return true;
         }
+
+        document.getElementById("name").addEventListener("input", validateForm);
+        document.getElementById("email").addEventListener("input", validateForm);
+        document.getElementById("password").addEventListener("input", validateForm);
+        document.getElementById("confirmPassword").addEventListener("input", validateForm);
+
     </script>
 </head>
 </html>
