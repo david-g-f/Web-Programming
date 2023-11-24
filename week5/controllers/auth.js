@@ -46,3 +46,21 @@ exports.register = (req, res) => {
     });
     
 };
+
+exports.login = (req, res) => {
+    const {email, password} = req.body;
+    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        
+        if(result.length == 0 || !(await bcrypt.compare(password, result[0].password))){
+            return res.render('login', {
+                message: 'Invalid credentials.'
+            });
+        } else{
+           const user = result[0];
+           return res.render('profile', { user });   
+        }
+    });
+}
