@@ -1,2 +1,2 @@
-# F28WP-Lab
-This is my repository for all labs WP-related. 
+# WEB PROGRAMMING TESTS
+Worked on HTML, CSS, JS, Node.JS and serverside programming, and minor practice with front-end libraries and toolkits like React. 
